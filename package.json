@@ -1,25 +1,16 @@
 {
-    "name": "space-invaders",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "dev": "lite-server"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mariovyord/space-invaders.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/mariovyord/space-invaders/issues"
-    },
-    "homepage": "https://github.com/mariovyord/space-invaders#readme",
-    "devDependencies": {
-        "eslint": "^8.24.0"
-    },
-    "dependencies": {
-        "lite-server": "^2.6.1"
-    }
+  "name": "space-invaders",
+  "version": "1.0.0",
+  "description": "Space Invaders clone with Canvas API.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "eslint": "^9.16.0",
+    "globals": "^15.12.0"
+  }
 }
