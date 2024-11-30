@@ -83,7 +83,9 @@ export class Game {
     this.updateGrid();
     this.movePlayer();
     this.spawnInvaders();
-
+    if (this.game.over) {
+      this.displayGameOver();
+    }
     this.frames++;
   };
 
@@ -140,13 +142,14 @@ export class Game {
             this.invaderProjectiles.splice(invaderProjectilesIndex, 1);
             this.player.opacity = 0;
             this.game.over = true;
+            this.displayGameOver();
           }, 0);
 
           setTimeout(() => {
             this.invaderProjectiles.splice(invaderProjectilesIndex, 1);
             this.player.opacity = 0;
             this.game.active = false;
-          }, 2000);
+          }, 4000);
 
           // Player particles in death
           this.createParticles({
@@ -385,5 +388,16 @@ export class Game {
           break;
       }
     });
+  };
+
+  cleanup = () => {
+    throw new Error("Method not implemented.");
+  };
+
+  displayGameOver = () => {
+    ctx.font = "50px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
   };
 }
