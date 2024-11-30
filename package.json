@@ -1,7 +1,7 @@
 {
-  "name": "space-invaders",
+  "name": "cosmic-invaders",
   "version": "1.0.0",
-  "description": "Space Invaders clone with Canvas API.",
+  "description": "Cosmic Invaders clone with Canvas API.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint ."
