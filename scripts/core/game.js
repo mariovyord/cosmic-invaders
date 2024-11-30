@@ -10,13 +10,22 @@ import {
 } from "./constants.js";
 import { backToStart } from "./main-menu.js";
 
+/**
+ * Class representing the game.
+ */
 export class Game {
   constructor() {
+    /** @type {Player} */
     this.player = new Player();
+    /** @type {PlayerProjectile[]} */
     this.playerProjectiles = [];
+    /** @type {InvadersGrid[]} */
     this.grids = [];
+    /** @type {Particle[]} */
     this.particles = [];
+    /** @type {Array} */
     this.invaderProjectiles = [];
+    /** @type {Object} */
     this.keys = {
       a: {
         pressed: false,
@@ -28,23 +37,33 @@ export class Game {
         pressed: false,
       },
     };
+    /** @type {number} */
     this.frames = 0;
+    /** @type {Object} */
     this.game = {
       over: false,
       active: true,
     };
+    /** @type {number} */
     this.randomInterval = Math.trunc(Math.random() * 500 + 500);
+    /** @type {HTMLElement} */
     this.scoreElement = document.querySelector(".score");
+    /** @type {number} */
     this.score = 0;
   }
 
+  /**
+   * Start the game.
+   */
   start = () => {
     this.spawnParticles();
     this.animate();
     this.handleKeypress();
   };
 
-  // game loop
+  /**
+   * The game loop.
+   */
   animate = () => {
     if (!this.game.active) {
       backToStart();
@@ -68,6 +87,9 @@ export class Game {
     this.frames++;
   };
 
+  /**
+   * Update the particles in the game background.
+   */
   updateParticles = () => {
     this.particles.forEach((particle, particleIndex) => {
       if (particle.position.y - particle.radius >= canvas.height) {
@@ -77,7 +99,7 @@ export class Game {
 
       if (particle.opacity <= 0) {
         setTimeout(() => {
-          // clear particles
+          // Clear particles
           this.particles.splice(particleIndex, 1);
         }, 0);
       } else {
@@ -86,6 +108,9 @@ export class Game {
     });
   };
 
+  /**
+   * Update the invader projectiles.
+   */
   updateInvaderProjectiles = () => {
     this.invaderProjectiles.forEach(
       (invaderProjectile, invaderProjectilesIndex) => {
@@ -94,14 +119,14 @@ export class Game {
           canvas.height
         ) {
           setTimeout(() => {
-            // clear projectile if it goes outside of canvas
+            // Clear projectile when it goes outside of canvas
             this.invaderProjectiles.splice(invaderProjectilesIndex, 1);
           }, 0);
         } else {
           invaderProjectile.update();
         }
 
-        // projectile hits player
+        // Projectile hits player
         if (
           invaderProjectile.position.y + invaderProjectile.height >=
             this.player.position.y &&
@@ -110,7 +135,7 @@ export class Game {
           invaderProjectile.position.x <=
             this.player.position.x + this.player.width
         ) {
-          // remove projectile that hits player
+          // Remove projectile that hits player
           setTimeout(() => {
             this.invaderProjectiles.splice(invaderProjectilesIndex, 1);
             this.player.opacity = 0;
@@ -123,7 +148,7 @@ export class Game {
             this.game.active = false;
           }, 2000);
 
-          // player particles
+          // Player particles in death
           this.createParticles({
             object: this.player,
             color: "red",
@@ -134,6 +159,9 @@ export class Game {
     );
   };
 
+  /**
+   * Update the player projectiles.
+   */
   updatePlayerProjectiles = () => {
     this.playerProjectiles.forEach((projectile, i) => {
       if (projectile.position.y + projectile.radius <= 0) {
@@ -147,11 +175,14 @@ export class Game {
     });
   };
 
+  /**
+   * Update the grid of invaders.
+   */
   updateGrid = () => {
     this.grids.forEach((grid, gridIndex) => {
       grid.update();
 
-      // spawn projectiles
+      // Spawn projectiles
       if (this.frames % 100 === 0 && grid.invaders.length > 0) {
         grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot(
           this.invaderProjectiles
@@ -161,7 +192,7 @@ export class Game {
       grid.invaders.forEach((invader, invaderIndex) => {
         invader.update({ velocity: grid.velocity });
 
-        // projectiles hit enemies
+        // Projectiles hit enemies
         this.playerProjectiles.forEach((projectile, projectileIndex) => {
           if (
             projectile.position.y - projectile.radius <=
@@ -179,7 +210,7 @@ export class Game {
                 (currentProjectile) => currentProjectile === projectile
               );
 
-              // remove invader and projectile
+              // Remove invader and projectile
               if (invaderFound && projectileFound) {
                 this.score += 100;
                 this.scoreElement.textContent = this.score;
@@ -201,7 +232,7 @@ export class Game {
 
                   grid.position.x = firstInvader.position.x;
                 } else {
-                  // clear empty grids if empty
+                  // Clear empty grids if empty
                   this.grids.splice(gridIndex, 1);
                 }
               }
@@ -212,6 +243,9 @@ export class Game {
     });
   };
 
+  /**
+   * Move the player based on key presses.
+   */
   movePlayer = () => {
     if (this.keys.a.pressed && this.player.position.x >= 0) {
       this.player.velocity.x = -Math.abs(PLAYER_SPEED);
@@ -228,6 +262,13 @@ export class Game {
     }
   };
 
+  /**
+   * Create particles for an object.
+   * @param {Object} options - The options for creating particles.
+   * @param {Object} options.object - The object to create particles for.
+   * @param {string} [options.color="#BAA0DE"] - The color of the particles.
+   * @param {boolean} options.fades - Whether the particles fade out.
+   */
   createParticles = ({ object, color = "#BAA0DE", fades }) => {
     for (let i = 0; i < 15; i++) {
       this.particles.push(
@@ -248,6 +289,9 @@ export class Game {
     }
   };
 
+  /**
+   * Spawn invaders at random intervals.
+   */
   spawnInvaders = () => {
     if (this.frames % this.randomInterval === 0) {
       this.grids.push(new InvadersGrid());
@@ -256,6 +300,9 @@ export class Game {
     }
   };
 
+  /**
+   * Spawn initial particles.
+   */
   spawnParticles = () => {
     for (let i = 0; i < 100; i++) {
       this.particles.push(
@@ -275,6 +322,9 @@ export class Game {
     }
   };
 
+  /**
+   * Handle keypress events for player movement and actions.
+   */
   handleKeypress = () => {
     // move player
     window.addEventListener("keydown", (e) => {
@@ -313,7 +363,8 @@ export class Game {
           break;
       }
     });
-    // clear button press
+
+    // Clear button press
     window.addEventListener("keyup", (e) => {
       const key = e.key;
       switch (key) {
