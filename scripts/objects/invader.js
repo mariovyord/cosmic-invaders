@@ -9,9 +9,9 @@ export class Invader {
     };
 
     const image = new Image();
-    image.src = "./assets/invader.png";
+    image.src = "./assets/sprites/invader.png";
     image.onload = () => {
-      const scale = 1;
+      const scale = 0.9;
       this.image = image;
       this.width = image.width * scale;
       this.height = image.height * scale;
