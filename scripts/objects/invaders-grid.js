@@ -2,7 +2,7 @@ import { canvas } from "../core/canvas.js";
 import { IMAGE_WIDTH, IMAGE_HEIGHT } from "../core/constants.js";
 import { Invader } from "./invader.js";
 
-export class Grid {
+export class InvadersGrid {
   constructor() {
     this.position = {
       x: 0,

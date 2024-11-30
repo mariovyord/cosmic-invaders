@@ -49,10 +49,10 @@ export class Player {
     ctx.restore();
   }
 
-  update() {
+  update = () => {
     if (this.image) {
       this.draw();
       this.position.x += this.velocity.x;
     }
-  }
+  };
 }
