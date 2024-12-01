@@ -17,6 +17,8 @@ export function initiateGame() {
     startTemplate.classList.add("hidden");
     gameTemplate?.classList.remove("hidden");
 
+    playStartMusic();
+
     currentGame.start();
   });
 }
@@ -29,4 +31,11 @@ export function backToStart() {
 
   gameTemplate.classList.add("hidden");
   startTemplate.classList.remove("hidden");
+}
+
+function playStartMusic() {
+  /** @type {HTMLAudioElement} */
+  const startSound = new Audio("../../assets/audio/start.wav");
+  startSound.play();
+  startSound.volume = 0.3;
 }
