@@ -53,6 +53,8 @@ export class Game {
     this.score = 0;
     /** @type {number} */
     this.lastRenderTimestamp = 0;
+    /** @type {number} */
+    this.animationFrameId = null;
   }
 
   /**
@@ -60,7 +62,7 @@ export class Game {
    */
   start = () => {
     this.spawnParticles();
-    this.lastRenderTimestamp = performance.now(); // Initialize lastRender with the current time
+    this.lastRenderTimestamp = performance.now(); // Initialize lastRenderTimestamp with the current time
     this.animate(this.lastRenderTimestamp);
     this.handleKeypress();
   };
@@ -75,7 +77,7 @@ export class Game {
     }
 
     // Call the animate function recursively
-    requestAnimationFrame(this.animate);
+    this.animationFrameId = requestAnimationFrame(this.animate);
 
     // Calculates the time elapsed since the last frame
     const deltaTime = timestamp - this.lastRenderTimestamp;
@@ -344,68 +346,87 @@ export class Game {
    */
   handleKeypress = () => {
     // move player
-    window.addEventListener("keydown", (e) => {
-      if (this.game.over) return;
-      const key = e.key;
-
-      switch (key) {
-        case "a":
-          this.keys.a.pressed = true;
-          break;
-        case "ArrowLeft":
-          this.keys.a.pressed = true;
-          break;
-        case "d":
-          this.keys.d.pressed = true;
-          break;
-        case "ArrowRight":
-          this.keys.d.pressed = true;
-          break;
-        case " ":
-          this.keys.space.pressed = true;
-          if (this.playerProjectiles.length <= 1) {
-            this.playerProjectiles.push(
-              new PlayerProjectile({
-                position: {
-                  x: this.player.position.x + this.player.width / 2,
-                  y: this.player.position.y,
-                },
-                velocity: {
-                  x: 0,
-                  y: PROJECTILE_SPEED,
-                },
-              })
-            );
-          }
-          break;
-      }
-    });
-
-    // Clear button press
-    window.addEventListener("keyup", (e) => {
-      const key = e.key;
-      switch (key) {
-        case "a":
-          this.keys.a.pressed = false;
-          break;
-        case "ArrowLeft":
-          this.keys.a.pressed = false;
-          break;
-        case "d":
-          this.keys.d.pressed = false;
-          break;
-        case "ArrowRight":
-          this.keys.d.pressed = false;
-          break;
-        case " ":
-          this.keys.space.pressed = false;
-          break;
-      }
-    });
+    window.addEventListener("keydown", this.handleKeydown);
+    window.addEventListener("keyup", this.handleKeyup);
   };
 
+  /**
+   * Handle keydown events.
+   * @param {KeyboardEvent} e - The keyboard event.
+   */
+  handleKeydown = (e) => {
+    if (this.game.over) return;
+    const key = e.key;
+
+    switch (key) {
+      case "a":
+      case "ArrowLeft":
+        this.keys.a.pressed = true;
+        break;
+      case "d":
+      case "ArrowRight":
+        this.keys.d.pressed = true;
+        break;
+      case " ":
+        this.keys.space.pressed = true;
+        if (this.playerProjectiles.length <= 1) {
+          this.playerProjectiles.push(
+            new PlayerProjectile({
+              position: {
+                x: this.player.position.x + this.player.width / 2,
+                y: this.player.position.y,
+              },
+              velocity: {
+                x: 0,
+                y: PROJECTILE_SPEED,
+              },
+            })
+          );
+        }
+        break;
+    }
+  };
+
+  /**
+   * Handle keyup events.
+   * @param {KeyboardEvent} e - The keyboard event.
+   */
+  handleKeyup = (e) => {
+    const key = e.key;
+    switch (key) {
+      case "a":
+      case "ArrowLeft":
+        this.keys.a.pressed = false;
+        break;
+      case "d":
+      case "ArrowRight":
+        this.keys.d.pressed = false;
+        break;
+      case " ":
+        this.keys.space.pressed = false;
+        break;
+    }
+  };
+
+  /**
+   * Clean up the game instance.
+   */
   cleanup = () => {
-    throw new Error("Method not implemented.");
+    // Remove event listeners
+    window.removeEventListener("keydown", this.handleKeydown);
+    window.removeEventListener("keyup", this.handleKeyup);
+
+    // Stop animations
+    cancelAnimationFrame(this.animationFrameId);
+
+    // Nullify references
+    this.player = null;
+    this.playerProjectiles = null;
+    this.grids = null;
+    this.particles = null;
+    this.invaderProjectiles = null;
+    this.keys = null;
+    this.scoreElement = null;
   };
 
   displayGameOver = () => {
