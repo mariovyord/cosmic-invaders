@@ -19,7 +19,10 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: black;
+    background: #000;
+    background-image: url(../assets/images/background.jpg); 
+    background-repeat: repeat;
+    background-size: 400px;   
 }
 
 .canvas-box {

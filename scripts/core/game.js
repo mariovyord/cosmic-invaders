@@ -429,10 +429,16 @@ export class Game {
     this.scoreElement = null;
   };
 
+  /**
+   * Display the game over screen.
+   */
   displayGameOver = () => {
     ctx.font = "50px Arial";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 4;
+    ctx.strokeText("Game Over", canvas.width / 2, canvas.height / 2);
     ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
   };
 }
