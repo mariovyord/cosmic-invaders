@@ -7,6 +7,7 @@ import {
   PLAYER_SPEED,
   PLAYER_ROTATION,
   PROJECTILE_SPEED,
+  FPS_INTERVAL,
 } from "./constants.js";
 import { backToStart } from "./main-menu.js";
 
@@ -50,6 +51,8 @@ export class Game {
     this.scoreElement = document.querySelector(".score");
     /** @type {number} */
     this.score = 0;
+    /** @type {number} */
+    this.lastRenderTimestamp = 0;
   }
 
   /**
@@ -57,36 +60,47 @@ export class Game {
    */
   start = () => {
     this.spawnParticles();
-    this.animate();
+    this.lastRenderTimestamp = performance.now(); // Initialize lastRender with the current time
+    this.animate(this.lastRenderTimestamp);
     this.handleKeypress();
   };
 
   /**
    * The game loop.
    */
-  animate = () => {
+  animate = (timestamp) => {
     if (!this.game.active) {
       backToStart();
       return;
     }
 
+    // Call the animate function recursively
     requestAnimationFrame(this.animate);
 
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Calculates the time elapsed since the last frame
+    const deltaTime = timestamp - this.lastRenderTimestamp;
 
-    this.player.update();
+    // Checks if enough time has passed to render the next frame
+    if (deltaTime > FPS_INTERVAL) {
+      // Updates the last time a frame was rendered, accounting for any leftover time
+      this.lastRenderTimestamp = timestamp - (deltaTime % FPS_INTERVAL);
 
-    this.updateParticles();
-    this.updateInvaderProjectiles();
-    this.updatePlayerProjectiles();
-    this.updateGrid();
-    this.movePlayer();
-    this.spawnInvaders();
-    if (this.game.over) {
-      this.displayGameOver();
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      this.player.update();
+
+      this.updateParticles();
+      this.updateInvaderProjectiles();
+      this.updatePlayerProjectiles();
+      this.updateGrid();
+      this.movePlayer();
+      this.spawnInvaders();
+      if (this.game.over) {
+        this.displayGameOver();
+      }
+      this.frames++;
     }
-    this.frames++;
   };
 
   /**
