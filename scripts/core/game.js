@@ -49,13 +49,41 @@ export class Game {
     this.randomInterval = Math.trunc(Math.random() * 500 + 500);
     /** @type {HTMLElement} */
     this.scoreElement = document.querySelector(".score");
+    /** @type {HTMLElement} */
+    this.bestScoreElement = document.querySelector(".best-score");
     /** @type {number} */
     this.score = 0;
+    /** @type {number} */
+    this.bestScore = this.getBestScoreFromStorage();
     /** @type {number} */
     this.lastRenderTimestamp = 0;
     /** @type {number} */
     this.animationFrameId = null;
   }
+
+  /**
+   * Get the best score from local storage.
+   * @returns {number} The best score.
+   */
+  getBestScoreFromStorage = () => {
+    let bestScore = 0;
+    try {
+      bestScore = localStorage.getItem("bestScore");
+    } catch {
+      bestScore = 0;
+    }
+
+    if (bestScore) {
+      const parsedScore = parseInt(bestScore, 10);
+      if (!isNaN(parsedScore)) {
+        bestScore = parsedScore;
+      }
+    }
+
+    this.bestScoreElement.textContent = bestScore;
+
+    return bestScore;
+  };
 
   /**
    * Start the game.
@@ -237,6 +265,13 @@ export class Game {
 
                 this.score += 100;
                 this.scoreElement.textContent = this.score;
+
+                if (this.score > this.bestScore) {
+                  this.bestScore = this.score;
+                  this.bestScoreElement.textContent = this.score;
+                  localStorage.setItem("bestScore", this.bestScore);
+                }
+
                 this.createParticles({
                   object: invader,
                   fades: true,
@@ -431,6 +466,8 @@ export class Game {
     this.invaderProjectiles = null;
     this.keys = null;
     this.scoreElement = null;
+    this.bestScore = null;
+    this.bestScoreElement = null;
   };
 
   /**
