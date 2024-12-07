@@ -7,11 +7,7 @@ export class InvaderProjectile {
     this.width = 4;
     this.height = 10;
 
-    // Play the shoot sound when the invader shoots
-    /** @type {HTMLAudioElement} */
-    this.shootSound = new Audio("../assets/audio/invader-shoot.wav");
-    this.shootSound.play();
-    this.shootSound.volume = 0.3;
+    this.playSound();
   }
 
   draw() {
@@ -23,5 +19,13 @@ export class InvaderProjectile {
     this.draw();
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+  }
+
+  playSound() {
+    // Play the shoot sound when the invader shoots
+    /** @type {HTMLAudioElement} */
+    this.shootSound = new Audio("../assets/audio/invader-shoot.wav");
+    this.shootSound.play();
+    this.shootSound.volume = 0.3;
   }
 }

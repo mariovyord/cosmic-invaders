@@ -9,13 +9,14 @@ import {
   PROJECTILE_SPEED,
   FPS_INTERVAL,
 } from "./constants.js";
-import { backToStart } from "./main-menu.js";
 
 /**
  * Class representing the game.
  */
 export class Game {
-  constructor() {
+  constructor(backToStartCb) {
+    /** @type {Function} */
+    this.backToStartCb = backToStartCb;
     /** @type {Player} */
     this.player = new Player();
     /** @type {PlayerProjectile[]} */
@@ -103,7 +104,7 @@ export class Game {
    */
   animate = (timestamp) => {
     if (!this.game.active) {
-      backToStart();
+      this.backToStartCb();
       return;
     }
 
