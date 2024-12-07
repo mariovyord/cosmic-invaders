@@ -47,9 +47,9 @@ export class Game {
     };
     /** @type {number} */
     this.randomInterval = Math.trunc(Math.random() * 500 + 500);
-    /** @type {HTMLElement} */
+    /** @type {HTMLElement | null} */
     this.scoreElement = document.querySelector(".score");
-    /** @type {HTMLElement} */
+    /** @type {HTMLElement | null} */
     this.bestScoreElement = document.querySelector(".best-score");
     /** @type {number} */
     this.score = 0;
@@ -57,8 +57,10 @@ export class Game {
     this.bestScore = this.getBestScoreFromStorage();
     /** @type {number} */
     this.lastRenderTimestamp = 0;
-    /** @type {number} */
+    /** @type {number | null} */
     this.animationFrameId = null;
+    /** @type {HTMLAudioElement | null} */
+    this.backgroundMusic = null;
   }
 
   /**
@@ -93,6 +95,7 @@ export class Game {
     this.lastRenderTimestamp = performance.now(); // Initialize lastRenderTimestamp with the current time
     this.animate(this.lastRenderTimestamp);
     this.handleKeypress();
+    this.startBackgroundMusic();
   };
 
   /**
@@ -458,16 +461,11 @@ export class Game {
     // Stop animations
     cancelAnimationFrame(this.animationFrameId);
 
-    // Nullify references
-    this.player = null;
-    this.playerProjectiles = null;
-    this.grids = null;
-    this.particles = null;
-    this.invaderProjectiles = null;
-    this.keys = null;
-    this.scoreElement = null;
-    this.bestScore = null;
-    this.bestScoreElement = null;
+    // Stop background music
+    if (this.backgroundMusic) {
+      this.backgroundMusic.pause();
+      this.backgroundMusic.currentTime = 0;
+    }
   };
 
   /**
@@ -485,5 +483,13 @@ export class Game {
     const gameOverSound = new Audio("../assets/audio/game-over.wav");
     gameOverSound.play();
     gameOverSound.volume = 0.1;
+  };
+
+  startBackgroundMusic = () => {
+    // Create the background music element
+    this.backgroundMusic = new Audio("./assets/audio/background.wav");
+    this.backgroundMusic.loop = true;
+    this.backgroundMusic.volume = 0.3;
+    this.backgroundMusic.play();
   };
 }

@@ -9,7 +9,7 @@ You can play the game [here](https://space-invaders-one.vercel.app/).
 ## Features
 
 - Classic Space Invaders gameplay
-- Simple and clean codebase
+- Simple codebase
 - Made with vanilla JavaScript and Canvas API
 - ESLint for code linting
 
