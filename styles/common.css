@@ -11,6 +11,20 @@ body {
     background-size: 400px;   
 }
 
+.gameboard {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    border: 2px solid white;
+} 
+a
+.canvas-box {
+    position: relative;
+    width: 100%;
+    max-width: 1024px;
+    overflow: hidden; 
+}
+
 .score-box {
     position: absolute;
     z-index: 100;
@@ -31,11 +45,6 @@ body {
     font-size: 12px;
     left: 10px;
     top: 30px;
-}
-
-.canvas-box {
-    position: relative;
-    border: 2px solid white;
 }
 
 /* Start Menu */
