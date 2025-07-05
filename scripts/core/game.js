@@ -263,7 +263,7 @@ export class Game {
 
               // Remove invader and projectile
               if (invaderFound && projectileFound) {
-                const audio = new Audio("../assets/audio/explode.wav");
+                const audio = new Audio("./assets/audio/explode.wav");
                 audio.play();
                 audio.volume = 0.15;
 
@@ -481,7 +481,7 @@ export class Game {
     ctx.strokeText("Game Over", canvas.width / 2, canvas.height / 2);
     ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
 
-    const gameOverSound = new Audio("../assets/audio/game-over.wav");
+    const gameOverSound = new Audio("./assets/audio/game-over.wav");
     gameOverSound.play();
     gameOverSound.volume = 0.1;
   };
