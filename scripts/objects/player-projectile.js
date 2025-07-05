@@ -26,7 +26,7 @@ export class PlayerProjectile {
   playSound() {
     // Play the shoot sound when the player shoots
     /** @type {HTMLAudioElement} */
-    this.shootSound = new Audio("../assets/audio/shoot.wav");
+    this.shootSound = new Audio("/assets/audio/shoot.wav");
     this.shootSound.play();
     this.shootSound.volume = 0.3;
   }
