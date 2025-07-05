@@ -37,7 +37,7 @@ export function backToStart() {
 
 function playStartMusic() {
   /** @type {HTMLAudioElement} */
-  const startSound = new Audio("../../assets/audio/start.wav");
+  const startSound = new Audio("./assets/audio/start.wav");
   startSound.play();
   startSound.volume = 0.3;
 }
