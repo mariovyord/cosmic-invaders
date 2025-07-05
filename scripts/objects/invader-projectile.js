@@ -24,7 +24,7 @@ export class InvaderProjectile {
   playSound() {
     // Play the shoot sound when the invader shoots
     /** @type {HTMLAudioElement} */
-    this.shootSound = new Audio("/assets/audio/invader-shoot.wav");
+    this.shootSound = new Audio("./assets/audio/invader-shoot.wav");
     this.shootSound.play();
     this.shootSound.volume = 0.3;
   }
