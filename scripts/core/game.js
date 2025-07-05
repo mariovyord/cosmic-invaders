@@ -481,14 +481,14 @@ export class Game {
     ctx.strokeText("Game Over", canvas.width / 2, canvas.height / 2);
     ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
 
-    const gameOverSound = new Audio("./assets/audio/game-over.wav");
+    const gameOverSound = new Audio("/assets/audio/game-over.wav");
     gameOverSound.play();
     gameOverSound.volume = 0.1;
   };
 
   startBackgroundMusic = () => {
     // Create the background music element
-    this.backgroundMusic = new Audio("./assets/audio/background.wav");
+    this.backgroundMusic = new Audio("/assets/audio/background.wav");
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3;
     this.backgroundMusic.play();
